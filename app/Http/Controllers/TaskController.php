@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateTaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use App\Events\TaskCreated;
 
 class TaskController extends Controller
 {
@@ -20,6 +21,8 @@ class TaskController extends Controller
     public function store(StoreTaskRequest $request)
     {
         $task = Task::create($request->validated());
+
+        TaskCreated::dispatch($task);
 
         return new TaskResource($task);
     }
